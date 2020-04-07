@@ -22,8 +22,8 @@ def map():
             pipe.multi()
             pipe.mset({newid: request.args.get('conference')})
             pipe.mset({f"conf_{request.args.get('conference')}":newid})
-            pipe.expire(newid, config.get('ID_EXPIRY_TIME'))
-            pipe.expire(request.args.get('conference'), 60*60*12)
+            pipe.expire(newid, app.config.get('ID_EXPIRY_TIME'))
+            pipe.expire(request.args.get('conference'), app.config.get('ID_EXPIRY_TIME'))
             pipe.execute()
             return jsonify({'id': newid, 'conference': request.args['conference']})
 
