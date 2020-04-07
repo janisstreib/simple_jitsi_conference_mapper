@@ -35,9 +35,12 @@ def get_id_by_conf(r, conf):
         return {'conference': conf, 'id':id}
 
 def get_conf_by_id(r, id):
-        id = int(id)
-        if not r.exists(id):
+        try:
+            id = int(id)
+            if not r.exists(id):
+                return None
+            conf = r.get(id).decode('utf-8')
+            return {'id': id, 'conference':conf}
+        except:
             return None
-        conf = r.get(id).decode('utf-8')
-        return {'id': id, 'conference':conf}
 
