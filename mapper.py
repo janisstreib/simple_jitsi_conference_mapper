@@ -13,11 +13,13 @@ def map():
         if 'conference' in request.args:
             pipe = r.pipeline()
             conf = get_id_by_conf(r, request.args['conference'])
+            newid = None
             if conf is not None:
-                return jsonify(conf)
-            newid = randint(100000, 999999)
-            while r.exists(newid):
+                newid = conf['id']
+            else:
                 newid = randint(100000, 999999)
+                while r.exists(newid):
+                    newid = randint(100000, 999999)
             pipe.watch(newid, request.args.get('conference'))
             pipe.multi()
             pipe.mset({newid: request.args.get('conference')})
