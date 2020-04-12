@@ -20,7 +20,7 @@ def map():
                 newid = randint(100000, 999999)
                 while r.exists(newid):
                     newid = randint(100000, 999999)
-            pipe.watch(newid, request.args.get('conference'))
+            pipe.watch(newid, f"conf_{request.args.get('conference')}")
             pipe.multi()
             pipe.mset({newid: request.args.get('conference')})
             pipe.mset({f"conf_{request.args.get('conference')}":newid})
