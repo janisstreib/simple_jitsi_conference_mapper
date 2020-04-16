@@ -17,9 +17,9 @@ def map():
             if conf is not None:
                 newid = conf['id']
             else:
-                newid = randint(100000, 999999)
+                newid = randint(app.config.get('CONF_PIN_MIN', 100000), app.config.get('CONF_PIN_MAX', 999999))
                 while r.exists(newid):
-                    newid = randint(100000, 999999)
+                    newid = randint(app.config.get('CONF_PIN_MIN', 100000), app.config.get('CONF_PIN_MAX', 999999))
             pipe.watch(newid, f"conf_{request.args.get('conference')}")
             pipe.multi()
             pipe.mset({newid: request.args.get('conference')})
