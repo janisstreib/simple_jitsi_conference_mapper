@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, abort, request
 import redis
 from random import randint
+import re
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
@@ -11,6 +12,8 @@ def map():
         if 'id' in request.args:
             return jsonify(get_conf_by_id(r, request.args['id']))
         if 'conference' in request.args:
+            if not re.match(re.compile(app.config.get('ALLOWED_CONF_REGEX', '.*')), request.args['conference']):
+                return abort(403, "Invalid conference name")
             pipe = r.pipeline()
             conf = get_id_by_conf(r, request.args['conference'])
             newid = None
